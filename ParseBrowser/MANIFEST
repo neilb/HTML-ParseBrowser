@@ -1,0 +1,7 @@
+Changes
+MANIFEST
+README
+Makefile.PL
+ParseBrowser.pm
+ParseBrowser.pod
+test.pl

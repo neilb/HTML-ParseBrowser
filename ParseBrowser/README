@@ -1,0 +1,184 @@
+NAME
+
+HTML::ParseBrowser - Simple interface for User Agent string parsing.
+
+SYNOPSIS
+
+  use HTML::ParseBrowser;
+  my $ua = HTML::ParseBrowser->new($ENV{HTTP_USER_AGENT});
+  my $browsername = $ua->name;
+
+  my $browser = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows 98; Win 9x 4.90)';
+                    # BTW: That's IE 5.5 on Windows ME
+  $ua->Parse($new_browser);
+  $browsername = $ua->name;
+  my $os = $ua->os_type;
+
+  $browser = 'Mozilla 3.0 - Mozilla/3.0 (Linux 2.2.19 i686; U) Opera 5.0  [en]';
+                 # BTW: that's Opera 5.0 on Linux, English
+  $ua->Parse($new_browser);
+  my $lingo = $ua->language;
+
+DESCRIPTION
+
+The HTML::ParseBrowser is an Object-Oriented interface for parsing a User Agent
+string. It provides simple autoloaded methods for retrieving both the actual
+values stored in the interpreted (and, so far, correct) information that these
+wildly varying and nonstandardised strings attempt to convey.
+
+It provides the following methods:
+
+	new() (constructor method)
+
+Accepts an optional User Agent string as an argument. If present, the string
+will be parsed and the object populated. Either way the base object will be
+created.
+
+	Parse()
+
+Intended to be given a User Agent string as an argument. If present, it will be
+parsed and the object repopulated.
+
+If called without a true argument or with the argument '-' Parse() will simply
+depopulate the object and return undef. (This is useful for parsing logs, which
+often fill in a '-' for a null value.)
+
+	Case-insensitive Access Methods and properties.
+
+Any of the methods below may be called. Properties (->{whatever}) are case
+sensitive and are lowercase. Called as methods (the preferred
+way ->whatever() ) they are NOT case sensitive. As a result you can say
+$ua->NAME, $ua->name, $ua->Name, or $ua->nAMe if you so feel inclined.
+
+If an item is not able to be parsed, the methods will return undef. Calling
+things in the method way will not cause autovivification, while checking as
+properties without using exists() in a conditional first will cause
+autovivifivation first (and, in the case of the version subproperties, even
+exists() will do so - Ack!)
+
+Note that in some cases it is absolutely impossible to tell certain details.
+Nothing is guaranteed to be present -- not even 'name'.
+
+It is also possible for someone to make their browser lie about the operating
+system they are using (especially with spiders) -- and in some cases, they may
+even be using more than one at the same time (like running Konqueror through an
+X-Windows client on a Windows box).
+
+	user_agent()
+
+The actual original User Agent string you passed Parse() or new()
+
+	languages()
+
+Returns an arrayref of all languages recognised by placement and context in the
+User_Agent string. Uses English names of languages encountered where
+comprehended, ANSI code otherwise. Feel free to add to the hash to cover more
+languages.
+
+	language()
+
+Returns the language of the browser, interpreted as an English language name if
+possible, as above. If more than one language are uncovered in the string,
+chooses the one most repeated or the first encountered on any tie.
+
+	langs()
+
+Like languages() above, except uses ANSI standard language codes always.
+
+	lang()
+
+Like language() above, but only containing the ANSI language code
+
+	detail()
+
+The stuff inside any parentheses encountered. (Note that if for some really
+weird reason some User Agent string has two sets of parens, this string will
+contain the entire contents from the first paren to the last, including any
+intervening close and open parens. Anyway, they aren't supposed to do that, and
+such a case would likely only exist in cases of spiders and homebrewed
+browsers.)
+
+	useragents()
+
+Returns an arrayref of all intelligible standard User Agent engine/version
+pairs, and Opera's, to, if applicable. (Please note that this is despiute the
+fact that Opera's is _not_ intelligible.)
+
+	properties()
+
+Returns an arrayref of the stuff in details() broken up by /;\s+/
+
+	name()
+
+The _interpreted_ name of the browser. This value may not actually appear
+anywhere inside the string you handed it. Netscape Communicator provides a good
+example of this oddness.
+
+	version()
+
+Returns a hashref containing v, major, and minor, as explained below and keyed
+as such.
+
+	v()
+
+The full version of the useragent (i.e. '5.6.0')
+To access as a property, grab $ua->{version}->{v}
+
+	major()
+
+The Major version number (i.e. '5')
+To access as a property, grab $ua->{version}->{major}
+
+	minor()
+
+The Minor version number (i.e. '6.0')
+To access as a property, grab $ua->{version}->{minor}
+
+	os()
+
+The Operating System the browser is running on.
+
+	ostype()
+
+The _interpreted_ type of the Operating System. For instance, 'Windows' rather
+than 'Windows 9x 4.90'
+
+	osvers()
+
+The _interpreted_ version of the Operating System. For instance, 'ME' rather
+than '9x 4.90'
+
+Note: Windows NT versions below 5 will show up with ostype 'Windows NT' and
+osvers as appropriate. Windows NT versions 5 and up will show up as ostype
+'Windows NT' and osvers '2000'. Most of you know, but for those who don't: Windows 2000 is a version of NT, not of the 9x kernel and filesystem. I'll just have
+to wait and see what to expect for XP.
+
+	osarc()
+
+While rarely defined, some User Agent strings happily announce some detail or
+another about the Architecture they are running under. If this happens, it will
+be reflected here. Linux ('i686') and Mac ('PPC') are more likely than Windows
+to do this, strangely.
+
+SEE ALSO
+
+Modules
+HTTP::BrowserDetect (similar goal but with an opposite approach)
+
+Web Sites
+Distribution Site - http://www.dodger.org/modules
+
+AUTHOR
+
+Dodger (aka Sean Cannon)
+in association with the Necrosoft Network (www.necrosoft.net)
+
+COPYRIGHT
+
+The HTML::ParseBrowser module and code therein is
+Copyright (c)2001 Sean Cannon, Bensalem, Pennsylvania.
+
+All rights reserved. All rites reversed.
+
+You may distribute under the terms of either the GNU General Public
+License or the Artistic License, as specified in the Perl README file.
