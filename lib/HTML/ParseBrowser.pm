@@ -1,6 +1,6 @@
 package HTML::ParseBrowser;
 use vars ('%lang','$VERSION');
-$VERSION = 0.5;
+$VERSION = 1;
 
 %lang = ('en' => 'English',
          'de' => 'German',
@@ -15,40 +15,63 @@ sub new {
     my $browser = {};
     bless $browser, ref $class || $class;
     $browser->Parse(shift);
-    return $browser;}
+    return $browser;
+}
 
 sub Parse {
     my $browser = shift;
     my $useragent = shift;
-    #$browser = {}; # clean each time
     delete $browser->{$_} for keys %{$browser};
     return undef unless $useragent;
     return undef if $useragent eq '-';
     $browser->{user_agent} = $useragent;
     $useragent =~ s/Opera (\d)/Opera\/$1/i;
+
     while ($useragent =~ s/\[(\w+)\]//) {
         push @{$browser->{languages}}, $lang{$1} || $1;
-        push @{$browser->{langs}}, $1;}
-    #($browser->{detail}) = ($useragent =~ s/\((.*)\)//);
+        push @{$browser->{langs}}, $1;
+    }
+
     if ($useragent =~ s/\((.*)\)//) {
-        $browser->{detail} = $1;}
+        $browser->{detail} = $1;
+    }
+
     $browser->{useragents} = [grep /\//, split /\s+/, $useragent];
     $browser->{properties} = [split /;\s+/, $browser->{detail}];
+
     for (@{$browser->{useragents}}) {
         my ($br, $ver) = split /\//;
         $browser->{name} = $br;
         $browser->{version}->{v} = $ver;
-        ($browser->{version}->{major},
-         $browser->{version}->{minor}) = split /\./, $ver, 2;
-        last if lc $br eq 'lynx';}
+        ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $ver, 2;
+        last if lc $br eq 'lynx';
+
+    }
+
     for (@{$browser->{properties}}) {
         /compatible/i and next;
+
         unless (lc $browser->{name} eq 'webtv') {
             /^MSIE (.*)$/ and do {
                 $browser->{name} = 'MSIE';
                 $browser->{version}->{v} = $1;
                 ($browser->{version}->{major},
-                $browser->{version}->{minor}) = split /\./, $1, 2;};}
+                $browser->{version}->{minor}) = split /\./, $1, 2;
+            };
+        }
+
+        /^Konqueror\/([0-9.]+)/ and do {
+            $browser->{name} = 'Konqueror';
+            $browser->{version}->{v} = $1;
+            ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $browser->{version}->{v}, 2;
+        };
+
+	/\bCamino\/([0-9.]+)/ and do {
+	    $browser->{name} = 'Camino';
+	    $browser->{version}->{v} = $1;
+	    ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $browser->{version}->{v}, 2;
+	} and last;
+
         if (/^Win/) {
             $browser->{os} = $_;
             $browser->{ostype} = 'Windows';
@@ -59,58 +82,110 @@ sub Parse {
                     (undef, $browser->{osvers}) =
                       split / /, $browser->{osvers}, 2;
                     if ($browser->{osvers} >= 5) {
-                        $browser->{osvers} = '2000';}}}
+                        if ($browser->{osvers} >= 5.1) {
+                            if ($browser->{osvers} >= 6) {
+                                if ($browser->{osvers} >= 6.06) {
+                                    $browser->{osvers} = 'Server 2008';
+                                }
+                                else {
+                                    $browser->{osvers} = 'Vista';
+                                }
+                            }
+                            else {
+                                $browser->{osvers} = 'XP';
+                            }
+                        }
+                        else {
+                            $browser->{osvers} = '2000';
+                        }
+                    }
+                }
+            }
             elsif (/Win(\w\w)/i) {
-                $browser->{osvers} = $1;}
+                $browser->{osvers} = $1;
+            }
+
             if (lc $browser->{osvers} =~ /^9x/) {
-                $browser->{osvers} = 'ME';}}
+                $browser->{osvers} = 'Me';
+            }
+        }
+
         if (/^Mac/) {
             $browser->{os} = $_;
             $browser->{ostype} = 'Macintosh';
-            (undef, $browser->{osvers}) = split /[ _]/, $_, 2;}
+            (undef, $browser->{osvers}) = split /[ _]/, $_, 2;
+        }
+
         if (/^PPC$/) {
-            $browser->{osarc} = 'PPC';}
+            $browser->{osarc} = 'PPC';
+        }
+
         if (/^Linux/) {
             $browser->{os} = $_;
             $browser->{ostype} = 'Linux';
             (undef, $browser->{osvers}) = split / /, $_, 2;
             if ($browser->{osvers} =~ / /) {
                 (undef, $browser->{osvers},$browser->{osarc}) =
-                split / /, $_, 3;}}
+                split / /, $_, 3;
+            }
+        }
+
         if (/^(SunOS)|(Solaris)/i) {
             $browser->{os} = $_;
             $browser->{ostype} = 'Solaris';
             (undef, $browser->{osvers}) = split / /, $_, 2;
+
             if ($browser->{osvers} =~ / /) {
-                ($browser->{osvers},$browser->{osarc})
-              = split / /, $_, 3}}
+                ($browser->{osvers},$browser->{osarc}) = split / /, $_, 3
+            }
+        }
+
         for my $lang (keys %lang) {
             if (/^$lang\-/) {
                 my $l;
                 ($l, undef) = split /\-/;
                 push @{$browser->{languages}}, $lang{$l} || $1;
-                push @{$browser->{langs}}, $1;}
+                push @{$browser->{langs}}, $1;
+            }
+
             push @{$browser->{languages}}, $lang{$_} if /^$lang$/;
-            push @{$browser->{langs}}, $_ if /^$lang$/;}}
+            push @{$browser->{langs}}, $_ if /^$lang$/;
+        }
+    }
 
     if ($browser->{name} eq 'Mozilla') {
-        $browser->{name} = 'Netscape';}
+        $browser->{name} = 'Netscape';
+    }
+
     if ($browser->{name} eq 'Gecko') {
-        $browser->{name} = 'Mozilla';}
+        $browser->{name} = 'Mozilla';
+    }
+
     if ($browser->{name} eq 'Netscape6') {
-        $browser->{name} = 'Netscape';}
+        $browser->{name} = 'Netscape';
+    }
+
     if ($browser->{name} eq 'Konqueror') {
-        $browser->{ostype} = 'Linux';}
+        $browser->{ostype} ||= 'Linux';
+    }
+
+    if ($browser->{name} eq 'MSIE') {
+        $browser->{name} = 'Internet Explorer';
+    }
+
     $browser->{name} ||= $useragent;
 
     my %langs_in;
+
     for (@{$browser->{langs}}) {
-        $langs_in{$_}++;}
-    ($browser->{lang})
-      = sort {$langs_in{$a} <=> $langs_in{$b}} keys %langs_in;
+        $langs_in{$_}++;
+    }
+
+    ($browser->{lang}) = sort {$langs_in{$a} <=> $langs_in{$b}} keys %langs_in;
     $browser->{language} = $lang{$browser->{lang}} || $browser->{lang};
     delete $browser->{language} unless $browser->{language};
-    return $browser;}
+    return $browser;
+}
 
 sub AUTOLOAD {
     my $obj = shift;
@@ -119,9 +194,13 @@ sub AUTOLOAD {
     my $aref;
     $aref = \$obj->{$me} if exists $obj->{$me};
     $aref = \$obj->{version}->{$me} if exists $obj->{version}->{$me};
+
     if (my $replace = shift) {
-        $$aref = $replace;}
-    return $$aref;}
+        $$aref = $replace;
+    }
+
+    return $$aref;
+}
 
 __END__
 
@@ -282,9 +361,10 @@ The _interpreted_ version of the Operating System. For instance, 'ME' rather
 than '9x 4.90'
 
 Note: Windows NT versions below 5 will show up with ostype 'Windows NT' and
-osvers as appropriate. Windows NT versions 5 and up will show up as ostype
-'Windows NT' and osvers '2000'. Most of you know, but for those who don't: Windows 2000 is a version of NT, not of the 9x kernel and filesystem. I'll just have
-to wait and see what to expect for XP.
+osvers as appropriate. Windows NT version 5 will show up as ostype
+'Windows NT' and osvers '2000'. Windows NT 5.1+ will show up as osvers 'XP',
+until it gets to 6, where it will become Vista, until 6.06 which will be reported
+as 'Server 2008'.
 
 =item osarc()
 
@@ -292,6 +372,12 @@ While rarely defined, some User Agent strings happily announce some detail or
 another about the Architecture they are running under. If this happens, it will
 be reflected here. Linux ('i686') and Mac ('PPC') are more likely than Windows
 to do this, strangely.
+
+It should be noted, and is of great and vast world-shattering importance, that
+Firefox 3 reports the wrong OS version on Vista, so it's impossible to tell FF3
+on Vista from FF3 on XP. It is suspected that this was done deliberately by the
+Mozilla group to avoid embarrasing Vista users by exposing about how they ended
+up stuck with that piece of shit.
 
 =back
 
@@ -301,23 +387,25 @@ to do this, strangely.
 
 HTTP::BrowserDetect (similar goal but with an opposite approach)
 
+I'm thinking 'see also' in the sense of bad example. No offence to that module's
+writer, but "Is this IE? Yay! Is this 7? Yay" is a bass-ackwards approach to how
+to detect useragents. It's inherently unuseful. I wrote this deliberately because
+I couldn't stand that approach, because 'What is this?' made more sense to me, and
+moreover because it's robust. It's been seven years since the last update, and it
+just finally really kinda needed one (because Konqueror and a few others weren't
+detecting quite right on the name() results).
+
 =head2 Web Sites
-
-=over 6
-
-=item Distribution Site - http://www.dodger.org/modules
-
-=back 
 
 =head1 AUTHOR
 
 Dodger (aka Sean Cannon)
-in association with the Necrosoft Network (www.necrosoft.net)
 
 =head1 COPYRIGHT
 
 The HTML::ParseBrowser module and code therein is
-Copyright (c)2001 Sean Cannon, Bensalem, Pennsylvania.
+Copyright (c)2001 Sean Cannon, Bensalem, Pennsylvania,
+             2008 Sean Cannon, San Jose, California
 
 All rights reserved. All rites reversed.
 
