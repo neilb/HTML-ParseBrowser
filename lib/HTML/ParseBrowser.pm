@@ -1,4 +1,8 @@
 package HTML::ParseBrowser;
+
+use strict;
+use warnings;
+
 use vars ('%lang','$VERSION');
 $VERSION = 1;
 
@@ -34,10 +38,10 @@ sub Parse {
 
     if ($useragent =~ s/\((.*)\)//) {
         $browser->{detail} = $1;
+        $browser->{properties} = [split /;\s+/, $browser->{detail}];
     }
 
     $browser->{useragents} = [grep /\//, split /\s+/, $useragent];
-    $browser->{properties} = [split /;\s+/, $browser->{detail}];
 
     for (@{$browser->{useragents}}) {
         my ($br, $ver) = split /\//;
@@ -144,8 +148,8 @@ sub Parse {
             if (/^$lang\-/) {
                 my $l;
                 ($l, undef) = split /\-/;
-                push @{$browser->{languages}}, $lang{$l} || $1;
-                push @{$browser->{langs}}, $1;
+                push @{$browser->{languages}}, $lang{$l} || $l;
+                push @{$browser->{langs}}, $l;
             }
 
             push @{$browser->{languages}}, $lang{$_} if /^$lang$/;
@@ -181,10 +185,15 @@ sub Parse {
         $langs_in{$_}++;
     }
 
-    ($browser->{lang}) = sort {$langs_in{$a} <=> $langs_in{$b}} keys %langs_in;
-    $browser->{language} = $lang{$browser->{lang}} || $browser->{lang};
-    delete $browser->{language} unless $browser->{language};
+    if (int(keys %langs_in) > 0) {
+        ($browser->{lang}) = sort {$langs_in{$a} <=> $langs_in{$b}} keys %langs_in;
+        $browser->{language} = $lang{$browser->{lang}} || $browser->{lang};
+        # delete $browser->{language} unless $browser->{language};
+    }
     return $browser;
+}
+
+sub DESTROY {
 }
 
 sub AUTOLOAD {
@@ -211,19 +220,15 @@ HTML::ParseBrowser - Simple interface for User Agent string parsing.
 =head1 SYNOPSIS
 
   use HTML::ParseBrowser;
-  my $ua = HTML::ParseBrowser->new($ENV{HTTP_USER_AGENT});
-  my $browsername = $ua->name;
-
-  my $browser = 'Mozilla/4.0 (compatible; MSIE 5.5; Windows 98; Win 9x 4.90)';
-                    # BTW: That's IE 5.5 on Windows ME
-  $ua->Parse($new_browser);
-  $browsername = $ua->name;
-  my $os = $ua->os_type;
-
-  $browser = 'Mozilla 3.0 - Mozilla/3.0 (Linux 2.2.19 i686; U) Opera 5.0  [en]';
-                 # BTW: that's Opera 5.0 on Linux, English
-  $ua->Parse($new_browser);
-  my $lingo = $ua->language;
+  
+  # Opera 6 on Windows 98, French
+  my $uastring = 'Mozilla/4.0 (compatible; MSIE 5.0; Windows 98) Opera 6.0  [fr]';
+  
+  my $ua = HTML::ParseBrowser->new($uastring);
+  print "Browser  : ", $ua->name, "\n";
+  print "Version  : ", $ua->v, "\n";
+  print "OS       : ", $ua->os, "\n";
+  print "Language : ", $ua->language, "\n";
 
 =head1 DESCRIPTION
 
@@ -299,7 +304,7 @@ Like languages() above, except uses ANSI standard language codes always.
 
 =item lang()
 
-Like language() above, but only containing the ANSI language code
+Like language() above, but only containing the ANSI language code.
 
 =item detail()
 

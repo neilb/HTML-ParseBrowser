@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 17;
+use Test::More tests => 19;
 BEGIN { use_ok('HTML::ParseBrowser') };
 
 #########################
@@ -25,6 +25,8 @@ ok($ua->Parse($browser->{Safari3_mac}), 'Parser');
 ok($ua->name eq 'Safari', 'Recognise Safari 3');
 ok($ua->major == 525, 'recognise Safari major version');
 ok($ua->minor == 18, 'recognise Safari minor version');
+ok($ua->lang eq 'en', "recognise Safari en-US as 'en'");
+ok($ua->language eq 'English', "recognise Safari en-US as 'en'");
 
 ok($ua->Parse($browser->{FF2_mac}) && $ua->name eq 'Firefox', 'recognise Firefox 2');
 ok($ua->Parse($browser->{Camino_1}) && $ua->name eq 'Camino', 'recognise Camino 1');

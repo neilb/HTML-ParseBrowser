@@ -1,8 +1,18 @@
-Revision history for Perl extension HTML::ParseBrowser.
+Revision history for Perl module HTML::ParseBrowser
 
-0.5  ??? ??? ?? ??:??:?? 2001
+1.01 unreleased
+
+    - fixed bug which meant lang(), language() and friends didn't work
+    - fixed warnings about use of undefined values
+    - added a DESTROY method to fix warning caused by AUTOLOAD trying
+      to handle DESTROY
+    - now use strict and warnings
+
+1.0 2008-07-16
+
+    - updates
+
+0.5 2001-08-14
+
 	- original version
-	-AXn HTML::ParseBrowser
 
-1.0  Wed Jul 16 11:08:46 2008
-        - updates
