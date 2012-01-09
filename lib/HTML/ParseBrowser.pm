@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars ('%lang','$VERSION');
-$VERSION = 1;
+$VERSION = '1.01';
 
 %lang = ('en' => 'English',
          'de' => 'German',
