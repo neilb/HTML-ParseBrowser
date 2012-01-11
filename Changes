@@ -2,6 +2,8 @@ Revision history for Perl module HTML::ParseBrowser
 
 1.01 unreleased
 
+    - recognises Windows 7 and Windows 8
+    - now recognises Chrome
     - fixed bug which meant lang(), language() and friends didn't work
     - fixed warnings about use of undefined values
     - added a DESTROY method to fix warning caused by AUTOLOAD trying

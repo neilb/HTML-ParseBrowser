@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use vars ('%lang','$VERSION');
+use vars qw($AUTOLOAD);
 $VERSION = '1.01';
 
 %lang = ('en' => 'English',
@@ -25,6 +26,7 @@ sub new {
 sub Parse {
     my $browser = shift;
     my $useragent = shift;
+    my $version;
     delete $browser->{$_} for keys %{$browser};
     return undef unless $useragent;
     return undef if $useragent eq '-';
@@ -49,6 +51,7 @@ sub Parse {
         $browser->{version}->{v} = $ver;
         ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $ver, 2;
         last if lc $br eq 'lynx';
+        last if $br eq 'Chrome';
 
     }
 
@@ -83,25 +86,20 @@ sub Parse {
                 (undef, $browser->{osvers}) = split / /, $_, 2;
                 if ($browser->{osvers} =~ /^NT/) {
                     $browser->{ostype} = 'Windows NT';
-                    (undef, $browser->{osvers}) =
-                      split / /, $browser->{osvers}, 2;
-                    if ($browser->{osvers} >= 5) {
-                        if ($browser->{osvers} >= 5.1) {
-                            if ($browser->{osvers} >= 6) {
-                                if ($browser->{osvers} >= 6.06) {
-                                    $browser->{osvers} = 'Server 2008';
-                                }
-                                else {
-                                    $browser->{osvers} = 'Vista';
-                                }
-                            }
-                            else {
-                                $browser->{osvers} = 'XP';
-                            }
-                        }
-                        else {
-                            $browser->{osvers} = '2000';
-                        }
+                    (undef, $version) = split / /, $browser->{osvers}, 2;
+                    $browser->{osvers} = $version;
+                    if ($version >= 6.2) {
+                        $browser->{osvers} = '8';
+                    } elsif ($version >= 6.1) {
+                        $browser->{osvers} = '7';
+                    } elsif ($version >= 6.06) {
+                        $browser->{osvers} = 'Server 2008';
+                    } elsif ($version >= 6.0) {
+                        $browser->{osvers} = 'Vista';
+                    } elsif ($version >= 5.1) {
+                        $browser->{osvers} = 'XP';
+                    } elsif ($version >= 5.0) {
+                        $browser->{osvers} = '2000';
                     }
                 }
             }

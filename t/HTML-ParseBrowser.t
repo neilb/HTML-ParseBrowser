@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 19;
+use Test::More tests => 21;
 BEGIN { use_ok('HTML::ParseBrowser') };
 
 #########################
@@ -32,13 +32,15 @@ ok($ua->Parse($browser->{FF2_mac}) && $ua->name eq 'Firefox', 'recognise Firefox
 ok($ua->Parse($browser->{Camino_1}) && $ua->name eq 'Camino', 'recognise Camino 1');
 ok($ua->Parse($browser->{FF3_win}) && $ua->name eq 'Firefox', 'recognise Firefox 3');
 ok($ua->Parse($browser->{Safari3_win}) && $ua->name eq 'Safari', 'recognise Safari 3 for Windows');
-ok($ua->Parse($browser->{IE7_vista}) && $ua->name eq 'Internet Explorer', 'recognise Internet Explorer 7');
+ok($ua->Parse($browser->{IE7_vista}) && $ua->name eq 'Internet Explorer' && $ua->osvers eq 'Vista', 'recognise Internet Explorer 7');
 ok($ua->Parse($browser->{Opera9_vista}) && $ua->name eq 'Opera', 'recognise Opera 9 when it\'s (rarely) not lying');
 ok($ua->Parse($browser->{Lynx2_linux}) && $ua->name eq 'Lynx', 'recognise Lynx 2');
 ok($ua->Parse($browser->{IE6_XP}) && $ua->name eq 'Internet Explorer', 'recognise Internet Explorer 6');
 ok($ua->Parse($browser->{Konqueror_linux}) && $ua->name eq 'Konqueror', 'recognise Konqueror');
 ok($ua->Parse($browser->{Epiphany_linux}) && $ua->name eq 'Epiphany', 'recognise Epiphany');
 ok($ua->Parse($browser->{WebTV}) && $ua->name eq 'WebTV', 'recognise WebTV');
+ok($ua->Parse($browser->{Chrome8_Win7}) && $ua->name eq 'Chrome' && $ua->osvers eq '7', 'recognise Chrome 8 on Windows 7');
+ok($ua->Parse($browser->{Firefox9_Win8}) && $ua->name eq 'Firefox' && $ua->osvers eq '8', 'recognise Firefox 9 on Windows 8');
 
 __DATA__
 Safari3_mac: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; en-us) AppleWebKit/525.18 (KHTML, like Gecko) Version/3.1.1 Safari/525.18
@@ -53,3 +55,5 @@ IE6_XP: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.432
 Konqueror_linux: Mozilla/5.0 (compatible; Konqueror/3.5; Linux) KHTML/3.5.5 (like Gecko) (Debian)
 Epiphany_linux: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.0.14eol) Gecko/20070505 (Debian-1.8.0.15~pre080323b-0etch2) Epiphany/2.14
 WebTV: Mozilla/4.0 WebTV/2.6 (compatible; MSIE 4.0)
+Chrome8_Win7: Mozilla/5.0 (Windows; U; Windows NT 6.1; de-DE) AppleWebKit/534.10 (KHTML, like Gecko) Chrome/8.0.552.224 Safari/534.10
+Firefox9_Win8: Mozilla/5.0 (Windows NT 6.2; rv:9.0.1) Gecko/20100101 Firefox/9.0.1
