@@ -40,6 +40,7 @@ sub Parse {
     }
 
     while ($useragent =~ /\((.*?)\)/) {
+        $browser->{detail} .= ' ' if defined($browser->{detail});
         $browser->{detail} .= $1;
         $useragent =~ s/\((.*?)\)//;
     }
@@ -49,14 +50,21 @@ sub Parse {
 
     $browser->{useragents} = [grep /\//, split /\s+/, $useragent];
 
-    for (@{$browser->{useragents}}) {
-        my ($br, $ver) = split /\//;
-        $browser->{name} = $br;
-        $browser->{version}->{v} = $ver;
-        ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $ver, 2;
-        last if lc($br) eq 'lynx';
-        last if lc($br) eq 'chrome';
-        last if lc($br) eq 'opera';
+    if ($useragent =~ m!\bVersion/((\d+)\.(\d+)\S*) Safari/!) {
+        $browser->{name}             = 'Safari';
+        $browser->{version}->{v}     = $1;
+        $browser->{version}->{major} = $2;
+        $browser->{version}->{minor} = $3;
+    } else {
+        for (@{$browser->{useragents}}) {
+            my ($br, $ver) = split /\//;
+            $browser->{name} = $br;
+            $browser->{version}->{v} = $ver;
+            ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $ver, 2;
+            last if lc($br) eq 'lynx';
+            last if lc($br) eq 'chrome';
+            last if lc($br) eq 'opera';
+        }
     }
 
     for (@{$browser->{properties}}) {
@@ -90,7 +98,8 @@ sub Parse {
                 (undef, $browser->{osvers}) = split / /, $_, 2;
                 if ($browser->{osvers} =~ /^NT/) {
                     $browser->{ostype} = 'Windows NT';
-                    (undef, $version) = split / /, $browser->{osvers}, 2;
+                    # (undef, $version) = split / /, $browser->{osvers}, 2;
+                    (undef, $version) = split / /, $browser->{osvers};
                     $browser->{osvers} = $version;
                     if ($version >= 6.2) {
                         $browser->{osvers} = '8';

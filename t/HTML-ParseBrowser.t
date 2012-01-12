@@ -23,15 +23,15 @@ while (<DATA>) {
 ok($ua = new HTML::ParseBrowser, 'constructor');
 ok($ua->Parse($browser->{Safari3_mac}), 'Parser');
 ok($ua->name eq 'Safari', 'Recognise Safari 3');
-ok($ua->major == 525, 'recognise Safari major version');
-ok($ua->minor == 18, 'recognise Safari minor version');
+ok($ua->major == 3, 'recognise Safari major version');
+ok($ua->minor == 1, 'recognise Safari minor version');
 ok($ua->lang eq 'en', "recognise Safari en-US as 'en'");
 ok($ua->language eq 'English', "recognise Safari en-US as 'en'");
 
 ok($ua->Parse($browser->{FF2_mac}) && $ua->name eq 'Firefox', 'recognise Firefox 2');
 ok($ua->Parse($browser->{Camino_1}) && $ua->name eq 'Camino', 'recognise Camino 1');
 ok($ua->Parse($browser->{FF3_win}) && $ua->name eq 'Firefox', 'recognise Firefox 3');
-ok($ua->Parse($browser->{Safari3_win}) && $ua->name eq 'Safari', 'recognise Safari 3 for Windows');
+ok($ua->Parse($browser->{Safari3_win}) && $ua->name eq 'Safari' && $ua->major == 3 && $ua->minor, 'recognise Safari 3 for Windows');
 ok($ua->Parse($browser->{IE7_vista}) && $ua->name eq 'Internet Explorer' && $ua->osvers eq 'Vista', 'recognise Internet Explorer 7');
 ok($ua->Parse($browser->{Opera9_vista}) && $ua->name eq 'Opera', 'recognise Opera 9 when it\'s (rarely) not lying');
 ok($ua->Parse($browser->{Lynx2_linux}) && $ua->name eq 'Lynx', 'recognise Lynx 2');
