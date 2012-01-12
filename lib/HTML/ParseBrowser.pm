@@ -13,7 +13,8 @@ $VERSION = '1.01';
          'es' => 'Spanish',
          'it' => 'Italian',
          'dn' => 'Danish',
-         'jp' => 'Japanese');
+         'jp' => 'Japanese',
+         'ru' => 'Russian');
 
 sub new {
     my $class = shift;
@@ -38,8 +39,11 @@ sub Parse {
         push @{$browser->{langs}}, $1;
     }
 
-    if ($useragent =~ s/\((.*)\)//) {
-        $browser->{detail} = $1;
+    while ($useragent =~ /\((.*?)\)/) {
+        $browser->{detail} .= $1;
+        $useragent =~ s/\((.*?)\)//;
+    }
+    if (defined($browser->{detail})) {
         $browser->{properties} = [split /;\s+/, $browser->{detail}];
     }
 
@@ -50,15 +54,15 @@ sub Parse {
         $browser->{name} = $br;
         $browser->{version}->{v} = $ver;
         ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $ver, 2;
-        last if lc $br eq 'lynx';
-        last if $br eq 'Chrome';
-
+        last if lc($br) eq 'lynx';
+        last if lc($br) eq 'chrome';
+        last if lc($br) eq 'opera';
     }
 
     for (@{$browser->{properties}}) {
         /compatible/i and next;
 
-        unless (lc $browser->{name} eq 'webtv') {
+        unless (lc($browser->{name}) eq 'webtv' || lc($browser->{name}) eq 'opera') {
             /^MSIE (.*)$/ and do {
                 $browser->{name} = 'MSIE';
                 $browser->{version}->{v} = $1;
