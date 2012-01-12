@@ -55,6 +55,11 @@ sub Parse {
         $browser->{version}->{v}     = $1;
         $browser->{version}->{major} = $2;
         $browser->{version}->{minor} = $3;
+    } elsif ($useragent =~ m!Opera/.*Version/((\d+)\.(\d+)\S*)$!) {
+        $browser->{name}             = 'Opera';
+        $browser->{version}->{v}     = $1;
+        $browser->{version}->{major} = $2;
+        $browser->{version}->{minor} = $3;
     } else {
         for (@{$browser->{useragents}}) {
             my ($br, $ver) = split /\//;

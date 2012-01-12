@@ -4,7 +4,7 @@ Revision history for Perl module HTML::ParseBrowser
 
     - Fixed handling of Safari version numbers
     - Added tests for IE 8, 9, 10
-    - Improved support for Opera
+    - Improved support for Opera including correct handling of version numbers
     - Added Russian to language recognition
     - Recognises Windows 7 and Windows 8
     - Min version of Perl 5.004 and improved META keywords (from CHORNY)
