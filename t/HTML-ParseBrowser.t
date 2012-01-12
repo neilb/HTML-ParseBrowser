@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 21;
+use Test::More tests => 27;
 BEGIN { use_ok('HTML::ParseBrowser') };
 
 #########################
@@ -41,6 +41,12 @@ ok($ua->Parse($browser->{Epiphany_linux}) && $ua->name eq 'Epiphany', 'recognise
 ok($ua->Parse($browser->{WebTV}) && $ua->name eq 'WebTV', 'recognise WebTV');
 ok($ua->Parse($browser->{Chrome8_Win7}) && $ua->name eq 'Chrome' && $ua->osvers eq '7', 'recognise Chrome 8 on Windows 7');
 ok($ua->Parse($browser->{Firefox9_Win8}) && $ua->name eq 'Firefox' && $ua->osvers eq '8', 'recognise Firefox 9 on Windows 8');
+ok($ua->Parse($browser->{Iceweasel_linux}) && $ua->name eq 'Iceweasel' && $ua->{version}->{major} == 3, 'recognise Iceweasel on Linux');
+ok($ua->Parse($browser->{Iceweasel_Debian}) && $ua->name eq 'Iceweasel' && $ua->{version}->{major} == 3, 'recognise Iceweasel on Debian');
+ok($ua->Parse($browser->{Opera_Russian}) && $ua->name eq 'Opera' && $ua->{version}->{major} == 7 && $ua->language eq 'Russian', 'recognise Opera 7.51 Russian');
+ok($ua->Parse($browser->{IE10_Win7}) && $ua->name eq 'Internet Explorer' && $ua->{version}->{major} == 10, 'recognise IE 10');
+ok($ua->Parse($browser->{IE9_Vista}) && $ua->name eq 'Internet Explorer' && $ua->{version}->{major} == 9, 'recognise IE 9');
+ok($ua->Parse($browser->{IE8_Vista}) && $ua->name eq 'Internet Explorer' && $ua->{version}->{major} == 8, 'recognise IE 8');
 
 __DATA__
 Safari3_mac: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; en-us) AppleWebKit/525.18 (KHTML, like Gecko) Version/3.1.1 Safari/525.18
@@ -57,3 +63,9 @@ Epiphany_linux: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.0.14eol) Gecko/20
 WebTV: Mozilla/4.0 WebTV/2.6 (compatible; MSIE 4.0)
 Chrome8_Win7: Mozilla/5.0 (Windows; U; Windows NT 6.1; de-DE) AppleWebKit/534.10 (KHTML, like Gecko) Chrome/8.0.552.224 Safari/534.10
 Firefox9_Win8: Mozilla/5.0 (Windows NT 6.2; rv:9.0.1) Gecko/20100101 Firefox/9.0.1
+Iceweasel_linux: Mozilla/5.0 (X11; U; Linux x86_64; fr; rv:1.9.2.13) Gecko/20101203 Iceweasel/3.6.7 (like Firefox/3.6.13)
+Iceweasel_Debian: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.1) Gecko/20090730 Iceweasel/3.5.1 (Debian-3.5.1-1)
+Opera_Russian: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1) Opera 7.51 [ru]
+IE10_Win7: Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)
+IE9_Vista: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/5.0; chromeframe/11.0.696.57)
+IE8_Vista: Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 1.0.3705; .NET CLR 1.1.4322)
