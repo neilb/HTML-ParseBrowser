@@ -1,18 +1,14 @@
 HTML-ParseBrowser version 1.01
 ==============================
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+This is the distribution for the Perl module HTML::ParseBrowser,
+which is used to parse the UserAgent string passed to HTTP servers
+by web browsers, robots, and other web agents.
 
-A README file is required for CPAN modules since CPAN extracts the
-README file from a module distribution so that people browsing the
-archive can use it get an idea of the modules uses. It is usually a
-good idea to provide version information here so that people can
-decide whether fixes for the module are worth downloading.
+HTML::ParseBrowser doesn't currently use any other modules.
 
-Depends on whether you care if Konqueror shows up correctly, really.
+The module was originally written by Sean Cannon (DODGER).
+From 1.01 the module is now co-maintained by Neil Bowers (NEILB).
 
 INSTALLATION
 
@@ -23,15 +19,11 @@ To install this module type the following:
    make test
    make install
 
-DEPENDENCIES
-
-This module requires these other modules and libraries:
-
-  blah blah blah
-
 COPYRIGHT AND LICENCE
 
 Put the correct copyright and licence information here.
+
+Copyright (C) 2012, Neil Bowers
 
 Copyright (C) 2008 by Dodger
 
