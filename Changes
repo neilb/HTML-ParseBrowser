@@ -1,6 +1,6 @@
 Revision history for Perl module HTML::ParseBrowser
 
-1.01 unreleased
+1.01 2012-01-13
 
     - Fixed handling of Safari version numbers
     - Added tests for IE 8, 9, 10
