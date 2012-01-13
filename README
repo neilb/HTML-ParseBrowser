@@ -1,5 +1,4 @@
-HTML-ParseBrowser version 1.01
-==============================
+HTML::ParseBrowser
 
 This is the distribution for the Perl module HTML::ParseBrowser,
 which is used to parse the UserAgent string passed to HTTP servers
