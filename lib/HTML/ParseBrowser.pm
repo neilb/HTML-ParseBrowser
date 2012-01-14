@@ -3,11 +3,11 @@ package HTML::ParseBrowser;
 use strict;
 use warnings;
 
-use vars ('%lang','$VERSION');
+use vars ('$VERSION');
 use vars qw($AUTOLOAD);
-$VERSION = '1.01';
+$VERSION = '1.02';
 
-%lang = ('en' => 'English',
+my %lang = ('en' => 'English',
          'de' => 'German',
          'fr' => 'French',
          'es' => 'Spanish',
@@ -15,6 +15,14 @@ $VERSION = '1.01';
          'dn' => 'Danish',
          'jp' => 'Japanese',
          'ru' => 'Russian');
+
+my %name_map =
+(
+    'Mozilla'   => 'Netscape',
+    'Gecko'     => 'Mozilla',
+    'Netscape6' => 'Netscape',
+    'MSIE'      => 'Internet Explorer',
+);
 
 sub new {
     my $class   = shift;
@@ -75,7 +83,7 @@ sub Parse {
     for (@{$browser->{properties}}) {
         /compatible/i and next;
 
-        unless (lc($browser->{name}) eq 'webtv' || lc($browser->{name}) eq 'opera') {
+        unless (defined($browser->{name}) && (lc($browser->{name}) eq 'webtv' || lc($browser->{name}) eq 'opera')) {
             /^MSIE (.*)$/ and do {
                 $browser->{name} = 'MSIE';
                 $browser->{version}->{v} = $1;
@@ -97,36 +105,37 @@ sub Parse {
 	} and last;
 
         if (/^Win/) {
+        # print STDERR "WINDOWS: $_\n";
             $browser->{os} = $_;
             $browser->{ostype} = 'Windows';
-            if (/ /) {
-                (undef, $browser->{osvers}) = split / /, $_, 2;
-                if ($browser->{osvers} =~ /^NT/) {
-                    $browser->{ostype} = 'Windows NT';
-                    # (undef, $version) = split / /, $browser->{osvers}, 2;
-                    (undef, $version) = split / /, $browser->{osvers};
-                    $browser->{osvers} = $version;
-                    if ($version >= 6.2) {
-                        $browser->{osvers} = '8';
-                    } elsif ($version >= 6.1) {
-                        $browser->{osvers} = '7';
-                    } elsif ($version >= 6.06) {
-                        $browser->{osvers} = 'Server 2008';
-                    } elsif ($version >= 6.0) {
-                        $browser->{osvers} = 'Vista';
-                    } elsif ($version >= 5.1) {
-                        $browser->{osvers} = 'XP';
-                    } elsif ($version >= 5.0) {
-                        $browser->{osvers} = '2000';
-                    }
+            if (/Windows NT\s*((\d+)(\.\d+)?)/ || /^WinNT((\d+)(\.\d+)?)/) {
+                $browser->{ostype} = 'Windows NT';
+                $version = $1;
+                if ($version >= 6.2) {
+                    $browser->{osvers} = '8';
+                } elsif ($version >= 6.1) {
+                    $browser->{osvers} = '7';
+                } elsif ($version >= 6.06) {
+                    $browser->{osvers} = 'Server 2008';
+                } elsif ($version >= 6.0) {
+                    $browser->{osvers} = 'Vista';
+                } elsif ($version >= 5.1) {
+                    $browser->{osvers} = 'XP';
+                } elsif ($version >= 5.0) {
+                    $browser->{osvers} = '2000';
+                } else {
+                    $browser->{osvers}           = $version;
+                    $browser->{version}->{v}     = $1;
+                    $browser->{version}->{major} = $2;
+                    $browser->{version}->{minor} = $3 if defined($3);
                 }
             }
-            elsif (/Win(\w\w)/i) {
+            elsif (/Windows (\d+(\.\d+)?)/) {
+                $browser->{version}->{v}     = $1;
+                $browser->{version}->{major} = $2;
+                $browser->{version}->{minor} = $3 if defined($3);
+            } elsif (/Win(\w\w)/i) {
                 $browser->{osvers} = $1;
-            }
-
-            if (lc $browser->{osvers} =~ /^9x/) {
-                $browser->{osvers} = 'Me';
             }
         }
 
@@ -144,19 +153,19 @@ sub Parse {
             $browser->{os} = $_;
             $browser->{ostype} = 'Linux';
             (undef, $browser->{osvers}) = split / /, $_, 2;
-            if ($browser->{osvers} =~ / /) {
-                (undef, $browser->{osvers},$browser->{osarc}) =
-                split / /, $_, 3;
+            if (defined($browser->{osvers}) && $browser->{osvers} =~ / /) {
+                (undef, $browser->{osvers},$browser->{osarc}) = split / /, $_, 3;
             }
         }
 
-        if (/^(SunOS)|(Solaris)/i) {
+        if (/^(SunOS|Solaris)/i) {
             $browser->{os} = $_;
             $browser->{ostype} = 'Solaris';
-            (undef, $browser->{osvers}) = split / /, $_, 2;
-
-            if ($browser->{osvers} =~ / /) {
-                ($browser->{osvers},$browser->{osarc}) = split / /, $_, 3
+            if (/(sun4[a-z]|i86pc)/) {
+                $browser->{osarc} = $1;
+            }
+            if (/^SunOS\s*([0-9\.]+)/) {
+                $browser->{osvers} = $1;
             }
         }
 
@@ -173,27 +182,15 @@ sub Parse {
         }
     }
 
-    if ($browser->{name} eq 'Mozilla') {
-        $browser->{name} = 'Netscape';
+    if (defined($browser->{name}) && exists $name_map{ $browser->{name} }) {
+        $browser->{name} = $name_map{ $browser->{name} };
     }
 
-    if ($browser->{name} eq 'Gecko') {
-        $browser->{name} = 'Mozilla';
-    }
-
-    if ($browser->{name} eq 'Netscape6') {
-        $browser->{name} = 'Netscape';
-    }
+    $browser->{name} ||= $useragent;
 
     if ($browser->{name} eq 'Konqueror') {
         $browser->{ostype} ||= 'Linux';
     }
-
-    if ($browser->{name} eq 'MSIE') {
-        $browser->{name} = 'Internet Explorer';
-    }
-
-    $browser->{name} ||= $useragent;
 
     my %langs_in;
 
@@ -213,18 +210,17 @@ sub DESTROY {
 }
 
 sub AUTOLOAD {
-    my $obj = shift;
-    my $me = lc $AUTOLOAD;
-    $me =~ s/^.*\:\://;
-    my $aref;
-    $aref = \$obj->{$me} if exists $obj->{$me};
-    $aref = \$obj->{version}->{$me} if exists $obj->{version}->{$me};
+    my $self   = shift;
+    my $method = lc($AUTOLOAD);
+    $method =~ s/^.*\:\://;
 
-    if (my $replace = shift) {
-        $$aref = $replace;
+    if (exists($self->{$method})) {
+        return $self->{$method};
+    } elsif (exists($self->{version}->{$method})) {
+        return $self->{version}->{$method};
     }
 
-    return $$aref;
+    return undef;
 }
 
 __END__
@@ -286,7 +282,7 @@ find in a logfile is valid, or makes sense.
 
 =back
 
-=over 8
+=over 4
 
 =item user_agent()
 
@@ -377,11 +373,8 @@ another about the Architecture they are running under. If this happens, it will
 be reflected here. Linux ('i686') and Mac ('PPC') are more likely than Windows
 to do this, strangely.
 
-It should be noted, and is of great and vast world-shattering importance, that
-Firefox 3 reports the wrong OS version on Vista, so it's impossible to tell FF3
-on Vista from FF3 on XP. It is suspected that this was done deliberately by the
-Mozilla group to avoid embarrasing Vista users by exposing about how they ended
-up stuck with that piece of shit.
+Apparently, Firefox 3 reports the wrong OS version on Vista,
+so it's impossible to tell FF3 on Vista from FF3 on XP.
 
 =back
 
