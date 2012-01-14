@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 28;
+use Test::More tests => 29;
 BEGIN { use_ok('HTML::ParseBrowser') };
 
 #########################
@@ -48,6 +48,7 @@ ok($ua->Parse($browser->{IE10_Win7}) && $ua->name eq 'Internet Explorer' && $ua-
 ok($ua->Parse($browser->{IE9_Vista}) && $ua->name eq 'Internet Explorer' && $ua->major == 9, 'recognise IE 9');
 ok($ua->Parse($browser->{IE8_Vista}) && $ua->name eq 'Internet Explorer' && $ua->major == 8, 'recognise IE 8');
 ok($ua->Parse($browser->{Opera11_Mac}) && $ua->name eq 'Opera' && $ua->major == 11 && $ua->minor == 51, 'recognise Opera 11.51/Mac');
+ok($ua->Parse($browser->{Netscape_Sunos}) && $ua->name eq 'Netscape' && $ua->major == 4 && $ua->minor == 79 && $ua->ostype eq 'Solaris' && $ua->osvers eq '5.10' && $ua->osarc eq 'i86pc', 'recognise Netscape on Solaris');
 
 __DATA__
 Safari3_mac: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; en-us) AppleWebKit/525.18 (KHTML, like Gecko) Version/3.1.1 Safari/525.18
@@ -71,3 +72,4 @@ IE10_Win7: Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.
 IE9_Vista: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.0; Trident/5.0; chromeframe/11.0.696.57)
 IE8_Vista: Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 1.0.3705; .NET CLR 1.1.4322)
 Opera11_Mac: Opera/9.80 (Macintosh; Intel Mac OS X 10.7.2; U; en) Presto/2.9.168 Version/11.51
+Netscape_Sunos: Mozilla/4.79 [en] (X11; U; SunOS 5.10 i86pc)
