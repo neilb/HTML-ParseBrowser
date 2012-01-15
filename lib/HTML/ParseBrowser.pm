@@ -97,17 +97,23 @@ sub Parse {
             };
         }
 
+        if (m!^Opera Mini/([0-9.]+)!) {
+            $browser->{name} = 'Opera Mini';
+            $browser->{version}->{v} = $1;
+            ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $browser->{version}->{v};
+        }
+
         /^Konqueror\/([0-9.]+)/ and do {
             $browser->{name} = 'Konqueror';
             $browser->{version}->{v} = $1;
             ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $browser->{version}->{v}, 2;
         };
 
-	/\bCamino\/([0-9.]+)/ and do {
-	    $browser->{name} = 'Camino';
-	    $browser->{version}->{v} = $1;
-	    ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $browser->{version}->{v}, 2;
-	} and last;
+        /\bCamino\/([0-9.]+)/ and do {
+            $browser->{name} = 'Camino';
+            $browser->{version}->{v} = $1;
+            ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $browser->{version}->{v}, 2;
+        } and last;
 
         if (/^Win/) {
         # print STDERR "WINDOWS: $_\n";
