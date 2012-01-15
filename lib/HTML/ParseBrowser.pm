@@ -3,18 +3,21 @@ package HTML::ParseBrowser;
 use strict;
 use warnings;
 
-use vars ('$VERSION');
 use vars qw($AUTOLOAD);
-$VERSION = '1.02';
+our $VERSION = '1.03';
 
-my %lang = ('en' => 'English',
-         'de' => 'German',
-         'fr' => 'French',
-         'es' => 'Spanish',
-         'it' => 'Italian',
-         'dn' => 'Danish',
-         'jp' => 'Japanese',
-         'ru' => 'Russian');
+my %lang =
+(
+    'en' => 'English',
+    'de' => 'German',
+    'fr' => 'French',
+    'es' => 'Spanish',
+    'it' => 'Italian',
+    'da' => 'Danish',
+    'ja' => 'Japanese',
+    'ru' => 'Russian',
+);
+my $langRE = join('|', keys %lang);
 
 my %name_map =
 (
@@ -73,7 +76,9 @@ sub Parse {
             my ($br, $ver) = split /\//;
             $browser->{name} = $br;
             $browser->{version}->{v} = $ver;
-            ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $ver, 2;
+            if ($ver =~ m!^v?(\d+)\.(\d+)!) {
+                ($browser->{version}->{major}, $browser->{version}->{minor}) = ($1, $2);
+            }
             last if lc($br) eq 'lynx';
             last if lc($br) eq 'chrome';
             last if lc($br) eq 'opera';
@@ -149,6 +154,7 @@ sub Parse {
             $browser->{osarc} = 'PPC';
         }
 
+        # TODO: parsing of version and osarc doesn't always get it right. See Danish Opera test
         if (/^Linux/) {
             $browser->{os} = $_;
             $browser->{ostype} = 'Linux';
@@ -169,16 +175,10 @@ sub Parse {
             }
         }
 
-        for my $lang (keys %lang) {
-            if (/^$lang\-/) {
-                my $l;
-                ($l, undef) = split /\-/;
-                push @{$browser->{languages}}, $lang{$l} || $l;
-                push @{$browser->{langs}}, $l;
-            }
-
-            push @{$browser->{languages}}, $lang{$_} if /^$lang$/;
-            push @{$browser->{langs}}, $_ if /^$lang$/;
+        if (/^($langRE)-/ || /^($langRE)$/) {
+            my $langCode = $1;
+            push(@{$browser->{languages}}, $lang{$langCode});
+            push(@{$browser->{langs}}, $langCode);
         }
     }
 
@@ -291,7 +291,7 @@ The original User-Agent string you passed to Parse() or new().
 =item languages()
 
 Returns an arrayref of all languages recognised by placement and context in the
-User_Agent string. Uses English names of languages encountered where
+User-Agent string. Uses English names of languages encountered where
 comprehended, or the ISO two-letter language code otherwise.
 
 =item language()
@@ -318,7 +318,7 @@ all of the. This seems sub-optimal, but works for the moment.
 
 Returns an arrayref of all intelligible standard User Agent engine/version
 pairs, and Opera's, to, if applicable. (Please note that this is despiute the
-fact that Opera's is _not_ intelligible.)
+fact that Opera's is I<not> intelligible.)
 
 =item properties()
 
