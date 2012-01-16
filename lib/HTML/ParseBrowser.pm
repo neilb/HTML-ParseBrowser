@@ -43,7 +43,7 @@ sub Parse {
     return undef unless $useragent;
     return undef if $useragent eq '-';
     $browser->{user_agent} = $useragent;
-    $useragent =~ s/Opera (\d)/Opera\/$1/i;
+    $useragent =~ s/Opera (?=\d)/Opera\//i;
 
     while ($useragent =~ s/\[(\w+)\]//) {
         push @{$browser->{languages}}, $lang{$1} || $1;
@@ -51,7 +51,7 @@ sub Parse {
     }
 
     while ($useragent =~ /\((.*?)\)/) {
-        $browser->{detail} .= ' ' if defined($browser->{detail});
+        $browser->{detail} .= ';' if defined($browser->{detail});
         $browser->{detail} .= $1;
         $useragent =~ s/\((.*?)\)//;
     }
@@ -97,16 +97,16 @@ sub Parse {
             };
         }
 
-        if (m!^Opera Mini/([0-9.]+)!) {
-            $browser->{name} = 'Opera Mini';
+        if (m!^AOL ([0-9].*)!) {
+            $browser->{name} = 'AOL';
             $browser->{version}->{v} = $1;
             ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $browser->{version}->{v};
         }
 
-        /^Konqueror\/([0-9.]+)/ and do {
+        /^Konqueror\/([-0-9.a-z]+)/ and do {
             $browser->{name} = 'Konqueror';
             $browser->{version}->{v} = $1;
-            ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $browser->{version}->{v}, 2;
+            ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $browser->{version}->{v};
         };
 
         /\bCamino\/([0-9.]+)/ and do {
@@ -115,8 +115,13 @@ sub Parse {
             ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $browser->{version}->{v}, 2;
         } and last;
 
+        if (m!^Opera Mini/([0-9.]+)!) {
+            $browser->{name} = 'Opera Mini';
+            $browser->{version}->{v} = $1;
+            ($browser->{version}->{major}, $browser->{version}->{minor}) = split /\./, $browser->{version}->{v};
+        }
+
         if (/^Win/) {
-        # print STDERR "WINDOWS: $_\n";
             $browser->{os} = $_;
             $browser->{ostype} = 'Windows';
             if (/Windows NT\s*((\d+)(\.\d+)?)/ || /^WinNT((\d+)(\.\d+)?)/) {
@@ -135,16 +140,11 @@ sub Parse {
                 } elsif ($version >= 5.0) {
                     $browser->{osvers} = '2000';
                 } else {
-                    $browser->{osvers}           = $version;
-                    $browser->{version}->{v}     = $1;
-                    $browser->{version}->{major} = $2;
-                    $browser->{version}->{minor} = $3 if defined($3);
+                    $browser->{osvers} = $version;
                 }
             }
             elsif (/Windows (\d+(\.\d+)?)/) {
-                $browser->{version}->{v}     = $1;
-                $browser->{version}->{major} = $2;
-                $browser->{version}->{minor} = $3 if defined($3);
+                $browser->{osvers} = $1;
             } elsif (/Win(\w\w)/i) {
                 $browser->{osvers} = $1;
             }
