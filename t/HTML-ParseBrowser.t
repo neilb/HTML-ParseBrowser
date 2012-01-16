@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 34;
+use Test::More tests => 35;
 BEGIN { use_ok('HTML::ParseBrowser') };
 
 #########################
@@ -54,6 +54,7 @@ ok($ua->Parse($browser->{OmniWeb_Italian}) && $ua->name eq 'OmniWeb' && $ua->maj
 ok($ua->Parse($browser->{Opera_Danish}) && $ua->name eq 'Opera' && $ua->major == 9 && $ua->minor == 64 && $ua->ostype eq 'Linux' && !defined($ua->osarc) && $ua->language eq 'Danish' && $ua->lang eq 'da', 'recognise Danish Opera');
 ok($ua->Parse($browser->{Safari_Japanese}) && $ua->name eq 'Safari' && $ua->major == 5 && $ua->minor == 0 && $ua->ostype eq 'Windows NT' && $ua->language eq 'Japanese' && $ua->lang eq 'ja', 'recognise Japanese Safari');
 ok($ua->Parse($browser->{Opera_Mini}) && $ua->name eq 'Opera Mini' && $ua->major == 6 && $ua->minor == 0 && $ua->language eq 'English' && $ua->lang eq 'en', 'recognise Opera Mini');
+ok($ua->Parse($browser->{AOL_XP}) && $ua->name eq 'AOL' && $ua->major == 9 && $ua->minor == 6, 'recognise AOL on Win XP');
 
 __DATA__
 Safari3_mac: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; en-us) AppleWebKit/525.18 (KHTML, like Gecko) Version/3.1.1 Safari/525.18
@@ -83,3 +84,4 @@ OmniWeb_Italian: Mozilla/5.0 (Macintosh; U; PPC Mac OS X; it-IT) AppleWebKit/125
 Opera_Danish: Opera/9.64 (X11; Linux i686; U; da) Presto/2.1.1
 Safari_Japanese: Mozilla/5.0 (Windows; U; Windows NT 6.0; ja-JP) AppleWebKit/533.20.25 (KHTML, like Gecko) Version/5.0.4 Safari/533.20.27
 Opera_Mini: Opera/9.80 (Series 60; Opera Mini/6.0.24095/24.760; U; en) Presto/2.5.25 Version/10.54
+AOL_XP: Mozilla/4.0 (compatible; MSIE 8.0; AOL 9.6; AOLBuild 4340.5001; Windows NT 5.1; Trident/4.0)
