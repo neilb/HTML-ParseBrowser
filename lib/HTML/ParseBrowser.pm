@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($AUTOLOAD);
-our $VERSION = '1.03';
+our $VERSION = '1.04';
 
 my %lang =
 (
