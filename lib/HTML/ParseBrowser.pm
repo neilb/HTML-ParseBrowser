@@ -51,7 +51,7 @@ sub Parse {
     }
 
     while ($useragent =~ /\((.*?)\)/) {
-        $browser->{detail} .= ';' if defined($browser->{detail});
+        $browser->{detail} .= '; ' if defined($browser->{detail});
         $browser->{detail} .= $1;
         $useragent =~ s/\((.*?)\)//;
     }
@@ -79,6 +79,7 @@ sub Parse {
             if ($ver =~ m!^v?(\d+)\.(\d+)!) {
                 ($browser->{version}->{major}, $browser->{version}->{minor}) = ($1, $2);
             }
+            last if lc($br) eq 'iron';
             last if lc($br) eq 'lynx';
             last if lc($br) eq 'chrome';
             last if lc($br) eq 'opera';

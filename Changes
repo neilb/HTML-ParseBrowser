@@ -2,7 +2,10 @@ Revision history for Perl module HTML::ParseBrowser
 
 1.04
 
-    - Correctly recognise Opera Mini
+    - Correctly recognise Opera Mini, AOL browser, and Iron
+    - Fixed bug where parsing some versions of Windows ended up setting
+      the browser version to be the Windows version
+    - Konqueror version wasn't being correctly matched in many cases
 
 1.03 2012-01-15
 
