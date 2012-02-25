@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($AUTOLOAD);
-our $VERSION = '1.04';
+our $VERSION = '1.05';
 
 my %lang =
 (
@@ -163,11 +163,14 @@ sub Parse {
 
         # TODO: parsing of version and osarc doesn't always get it right. See Danish Opera test
         if (/^Linux/) {
-            $browser->{os} = $_;
+            my $lstr = $_;
+            $browser->{os}     = 'Linux';
             $browser->{ostype} = 'Linux';
-            (undef, $browser->{osvers}) = split / /, $_, 2;
-            if (defined($browser->{osvers}) && $browser->{osvers} =~ / /) {
-                (undef, $browser->{osvers},$browser->{osarc}) = split / /, $_, 3;
+            if ($lstr =~ s/(i386|mips|amd64|sparc64|ppc|i686|i586|armv51|x86|x86-64|x86_64|ppc64|x64|x64_64)\b//) {
+                $browser->{osarc} = $1;
+            }
+            if ($lstr =~ / (\d+\.\S+)/) {
+                $browser->{osvers} = $1;
             }
         }
 

@@ -1,5 +1,11 @@
 Revision history for Perl module HTML::ParseBrowser
 
+1.05 2012-02-25
+
+    - Fixed some parsing issues related to 'Linux' and made the os
+      always report as 'Linux'.
+    - Added github repository metadata to Makefile.PL
+
 1.04 2012-01-16
 
     - Correctly recognise Opera Mini, AOL browser, and Iron

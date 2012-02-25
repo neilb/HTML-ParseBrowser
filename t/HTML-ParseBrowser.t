@@ -36,13 +36,13 @@ ok($ua->Parse($browser->{IE7_vista}) && $ua->name eq 'Internet Explorer' && $ua-
 ok($ua->Parse($browser->{Opera9_vista}) && $ua->name eq 'Opera', 'recognise Opera 9 when it\'s (rarely) not lying');
 ok($ua->Parse($browser->{Lynx2_linux}) && $ua->name eq 'Lynx', 'recognise Lynx 2');
 ok($ua->Parse($browser->{IE6_XP}) && $ua->name eq 'Internet Explorer', 'recognise Internet Explorer 6');
-ok($ua->Parse($browser->{Konqueror_linux}) && $ua->name eq 'Konqueror', 'recognise Konqueror');
+ok($ua->Parse($browser->{Konqueror_linux}) && $ua->name eq 'Konqueror' && $ua->os eq 'Linux', 'recognise Konqueror');
 ok($ua->Parse($browser->{Epiphany_linux}) && $ua->name eq 'Epiphany', 'recognise Epiphany');
 ok($ua->Parse($browser->{WebTV}) && $ua->name eq 'WebTV', 'recognise WebTV');
 ok($ua->Parse($browser->{Chrome8_Win7}) && $ua->name eq 'Chrome' && $ua->osvers eq '7' && $ua->language eq 'German' && $ua->lang eq 'de', 'recognise Chrome 8 on Windows 7');
 ok($ua->Parse($browser->{Firefox9_Win8}) && $ua->name eq 'Firefox' && $ua->osvers eq '8', 'recognise Firefox 9 on Windows 8');
-ok($ua->Parse($browser->{Iceweasel_linux}) && $ua->name eq 'Iceweasel' && $ua->{version}->{major} == 3 && $ua->language eq 'French' && $ua->lang eq 'fr', 'recognise Iceweasel on Linux');
-ok($ua->Parse($browser->{Iceweasel_Debian}) && $ua->name eq 'Iceweasel' && $ua->major == 3, 'recognise Iceweasel on Debian');
+ok($ua->Parse($browser->{Iceweasel_linux}) && $ua->name eq 'Iceweasel' && $ua->{version}->{major} == 3 && $ua->os eq 'Linux' && $ua->osarc eq 'x86_64' && $ua->language eq 'French' && $ua->lang eq 'fr', 'recognise Iceweasel on Linux');
+ok($ua->Parse($browser->{Iceweasel_Debian}) && $ua->name eq 'Iceweasel' && $ua->major == 3 && $ua->os eq 'Linux' && $ua->osarc eq 'x86_64', 'recognise Iceweasel on Debian');
 ok($ua->Parse($browser->{Opera_Russian}) && $ua->name eq 'Opera' && $ua->major == 7 && $ua->language eq 'Russian', 'recognise Opera 7.51 Russian');
 ok($ua->Parse($browser->{IE10_Win7}) && $ua->name eq 'Internet Explorer' && $ua->major == 10, 'recognise IE 10');
 ok($ua->Parse($browser->{IE9_Vista}) && $ua->name eq 'Internet Explorer' && $ua->major == 9, 'recognise IE 9');
@@ -51,7 +51,7 @@ ok($ua->Parse($browser->{Opera11_Mac}) && $ua->name eq 'Opera' && $ua->major == 
 ok($ua->Parse($browser->{Netscape_Sunos}) && $ua->name eq 'Netscape' && $ua->major == 4 && $ua->minor == 79 && $ua->ostype eq 'Solaris' && $ua->osvers eq '5.10' && $ua->osarc eq 'i86pc', 'recognise Netscape on Solaris');
 ok($ua->Parse($browser->{Firefox_Spanish}) && $ua->name eq 'Firefox' && $ua->major == 3 && $ua->minor == 6 && $ua->ostype eq 'Windows NT' && $ua->osvers eq '7' && $ua->language eq 'Spanish' && $ua->lang eq 'es', 'recognise Spanish Firefox 3.6.3');
 ok($ua->Parse($browser->{OmniWeb_Italian}) && $ua->name eq 'OmniWeb' && $ua->major == 563 && $ua->minor == 15 && $ua->ostype eq 'Macintosh' && !defined($ua->osvers) && $ua->language eq 'Italian' && $ua->lang eq 'it', 'recognise Italian OmniWeb');
-ok($ua->Parse($browser->{Opera_Danish}) && $ua->name eq 'Opera' && $ua->major == 9 && $ua->minor == 64 && $ua->ostype eq 'Linux' && !defined($ua->osarc) && $ua->language eq 'Danish' && $ua->lang eq 'da', 'recognise Danish Opera');
+ok($ua->Parse($browser->{Opera_Danish}) && $ua->name eq 'Opera' && $ua->major == 9 && $ua->minor == 64 && $ua->os eq 'Linux' && $ua->ostype eq 'Linux' && $ua->osarc eq 'i686' && $ua->language eq 'Danish' && $ua->lang eq 'da', 'recognise Danish Opera');
 ok($ua->Parse($browser->{Safari_Japanese}) && $ua->name eq 'Safari' && $ua->major == 5 && $ua->minor == 0 && $ua->ostype eq 'Windows NT' && $ua->language eq 'Japanese' && $ua->lang eq 'ja', 'recognise Japanese Safari');
 ok($ua->Parse($browser->{Opera_Mini}) && $ua->name eq 'Opera Mini' && $ua->major == 6 && $ua->minor == 0 && $ua->language eq 'English' && $ua->lang eq 'en', 'recognise Opera Mini');
 ok($ua->Parse($browser->{AOL_XP}) && $ua->name eq 'AOL' && $ua->major == 9 && $ua->minor == 6, 'recognise AOL on Win XP');
