@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($AUTOLOAD);
-our $VERSION = '1.05';
+our $VERSION = '1.06';
 
 my %lang =
 (
@@ -37,7 +37,8 @@ sub new {
 
 sub Parse {
     my $browser   = shift;
-    my $useragent = shift;
+    my $ua_string = shift;
+    my $useragent = $ua_string;
     my $version;
     delete $browser->{$_} for keys %{$browser};
     return undef unless $useragent;
@@ -61,7 +62,16 @@ sub Parse {
 
     $browser->{useragents} = [grep /\//, split /\s+/, $useragent];
 
-    if ($useragent =~ m!\bVersion/((\d+)\.(\d+)\S*) Safari/!) {
+    if ($ua_string =~ /(iPhone|iPad|iPod).*?OS\s+(\d_\d(_\d)?)/) {
+        $browser->{name} = 'Safari';
+        $browser->{os} = $browser->{ostype} = 'iOS';
+        ($browser->{osvers} = $2) =~ s/_/./g;
+        if ($useragent =~ m!Version/((\d+)(\.(\d+)[\.0-9]*)?)!) {
+            $browser->{version}->{v}     = $1;
+            $browser->{version}->{major} = $2;
+            $browser->{version}->{minor} = $4 if defined($4) && $4 ne '';
+        }
+    } elsif ($useragent =~ m!\bVersion/((\d+)\.(\d+)\S*) Safari/!) {
         $browser->{name}             = 'Safari';
         $browser->{version}->{v}     = $1;
         $browser->{version}->{major} = $2;
@@ -162,7 +172,11 @@ sub Parse {
         }
 
         # TODO: parsing of version and osarc doesn't always get it right. See Danish Opera test
-        if (/^Linux/) {
+        if (/Android\s([\.0-9]+)/) {
+            $browser->{os}     = 'Android';
+            $browser->{ostype} = 'Linux';
+            $browser->{osvers} = $1;
+        } elsif (/^Linux/) {
             my $lstr = $_;
             $browser->{os}     = 'Linux';
             $browser->{ostype} = 'Linux';
@@ -365,6 +379,7 @@ The Operating System the browser is running on.
 
 The I<interpreted> type of the Operating System.
 For instance, 'Windows' rather than 'Windows 9x 4.90'
+For 'Android', C<os()> returns 'Android' and C<ostype()> returns 'Linux'.
 
 =item osvers()
 
@@ -421,6 +436,8 @@ a given agent is a robot/crawler though.
 =head1 AUTHOR
 
 Dodger (aka Sean Cannon)
+
+Recent changes by Neil Bowers.
 
 =head1 COPYRIGHT
 

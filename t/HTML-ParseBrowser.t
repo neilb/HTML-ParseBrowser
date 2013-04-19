@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 36;
+use Test::More tests => 44;
 BEGIN { use_ok('HTML::ParseBrowser') };
 
 #########################
@@ -56,6 +56,82 @@ ok($ua->Parse($browser->{Safari_Japanese}) && $ua->name eq 'Safari' && $ua->majo
 ok($ua->Parse($browser->{Opera_Mini}) && $ua->name eq 'Opera Mini' && $ua->major == 6 && $ua->minor == 0 && $ua->language eq 'English' && $ua->lang eq 'en', 'recognise Opera Mini');
 ok($ua->Parse($browser->{AOL_XP}) && $ua->name eq 'AOL' && $ua->major == 9 && $ua->minor == 6, 'recognise AOL on Win XP');
 ok($ua->Parse($browser->{Iron_Win7}) && $ua->name eq 'Iron' && $ua->major == 13 && $ua->minor == 0 && $ua->v eq '13.0.800.1' && $ua->ostype eq 'Windows NT' && $ua->osvers eq '7', 'recognise AOL on Win XP');
+
+ok($ua->Parse('Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25')
+   && $ua->name eq 'Safari'
+   && $ua->major == 6
+   && $ua->minor == 0
+   && $ua->v eq '6.0'
+   && $ua->os eq 'iOS'
+   && $ua->osvers eq '6.0',
+   'Safari 6.0 on iOS 6.0');
+
+ok($ua->Parse('Mozilla/5.0 (iPhone; CPU iPhone OS 6_1_3 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10B329 Safari/8536.25')
+   && $ua->name eq 'Safari'
+   && $ua->major == 6
+   && $ua->minor == 0
+   && $ua->v eq '6.0'
+   && $ua->os eq 'iOS'
+   && $ua->osvers eq '6.1.3',
+   'Safari 6.0 on iPhone with iOS 6.1.3');
+
+ok($ua->Parse('Mozilla/5.0 (iPad; CPU OS 6_1_3 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10B329 Safari/8536.25')
+   && $ua->name eq 'Safari'
+   && $ua->major == 6
+   && $ua->minor == 0
+   && $ua->v eq '6.0'
+   && $ua->os eq 'iOS'
+   && $ua->osvers eq '6.1.3',
+   'Safari 6.0 on iPad with iOS 6.1.3');
+
+ok($ua->Parse('Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9A334 Safari/7534.48.3')
+   && $ua->name eq 'Safari'
+   && $ua->major == 5
+   && $ua->minor == 1
+   && $ua->v eq '5.1'
+   && $ua->os eq 'iOS'
+   && $ua->osvers eq '5.0',
+   'Safari 5.1 on iPhone with iOS 5.0');
+
+ok($ua->Parse('Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0 like Mac OS X; en-us) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A293 Safari/6531.22.7')
+   && $ua->name eq 'Safari'
+   && $ua->major == 4
+   && $ua->minor == 0
+   && $ua->v eq '4.0.5'
+   && $ua->os eq 'iOS'
+   && $ua->osvers eq '4.0',
+   'Safari 4.0.5 on iPhone with iOS 4.0');
+
+ok($ua->Parse('Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19')
+   && $ua->name eq 'Chrome'
+   && $ua->major == 18
+   && $ua->minor == 0
+   && $ua->v eq '18.0.1025.133'
+   && $ua->os eq 'Android'
+   && $ua->osvers eq '4.0.4'
+   && $ua->ostype eq 'Linux',
+   'Chrome 18 on Android 4.0.4');
+
+ok($ua->Parse('Mozilla/5.0 (Linux; Android 4.2.1; Galaxy Nexus Build/JOP40D) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.58 Mobile Safari/537.31')
+   && $ua->name eq 'Chrome'
+   && $ua->major == 26
+   && $ua->minor == 0
+   && $ua->v eq '26.0.1410.58'
+   && $ua->os eq 'Android'
+   && $ua->osvers eq '4.2.1'
+   && $ua->ostype eq 'Linux',
+   'Chrome 26 on Android 4.2.1');
+
+# Is this really Safari on Android?
+ok($ua->Parse('Mozilla/5.0 (Linux; U; Android 3.2; en-us; GT-P7300 Build/HTJ85B) AppleWebKit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13')
+   && $ua->name eq 'Safari'
+   && $ua->major == 4
+   && $ua->minor == 0
+   && $ua->v eq '4.0'
+   && $ua->os eq 'Android'
+   && $ua->osvers eq '3.2'
+   && $ua->ostype eq 'Linux',
+   'Safari 4.0 on Android 3.2');
 
 __DATA__
 Safari3_mac: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; en-us) AppleWebKit/525.18 (KHTML, like Gecko) Version/3.1.1 Safari/525.18
