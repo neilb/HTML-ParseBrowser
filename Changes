@@ -1,8 +1,13 @@
 Revision history for Perl module HTML::ParseBrowser
 
+1.07 2014-02-04
+
+    - Added github repo to pod
+
 1.06 2013-04-20
 
-    - Added initial support for getting the OS type and version right on iOS and Android
+    - Added initial support for getting the OS type and version right
+      on iOS and Android
       Nudged by Robert Mueller.
 
 1.05 2012-02-25

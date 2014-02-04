@@ -433,18 +433,22 @@ a given agent is a robot/crawler though.
 
 =back
 
+=head1 REPOSITORY
+
+L<https://github.com/neilbowers/HTML-ParseBrowser>
+ 
 =head1 AUTHOR
 
 Dodger (aka Sean Cannon)
 
 Recent changes by Neil Bowers.
 
-=head1 COPYRIGHT
-
-Changes in 1.01 and later are Copyright (C) 2012, Neil Bowers.
+=head1 COPYRIGHT AND LICENSE
 
 The HTML::ParseBrowser module and code therein is
 Copyright (c) 2001-2008 Sean Cannon
+
+Changes in 1.01 and later are Copyright (C) 2012-2014, Neil Bowers.
 
 All rights reserved. All rights reversed.
 
