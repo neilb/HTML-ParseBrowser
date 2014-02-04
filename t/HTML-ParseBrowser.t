@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 44;
+use Test::More tests => 46;
 BEGIN { use_ok('HTML::ParseBrowser') };
 
 #########################
@@ -133,6 +133,24 @@ ok($ua->Parse('Mozilla/5.0 (Linux; U; Android 3.2; en-us; GT-P7300 Build/HTJ85B)
    && $ua->ostype eq 'Linux',
    'Safari 4.0 on Android 3.2');
 
+ok($ua->Parse($browser->{IE11_Win8})
+  && $ua->name eq 'Internet Explorer'
+  && $ua->major == 11
+  && $ua->minor == 0
+  && $ua->v eq '11.0'
+  && $ua->ostype eq 'Windows NT'
+  && $ua->osvers eq '8.1',
+  'IE8 on Windows 8.1');
+
+ok($ua->Parse($browser->{Opera15_Win7})
+  && $ua->name eq 'Opera'
+  && $ua->major == 15
+  && $ua->minor == 0
+  && $ua->v eq '15.0.1147.100'
+  && $ua->ostype eq 'Windows NT'
+  && $ua->osvers eq '7',
+  'Opera 15 on Windows 7');
+
 __DATA__
 Safari3_mac: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; en-us) AppleWebKit/525.18 (KHTML, like Gecko) Version/3.1.1 Safari/525.18
 FF2_mac: Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14
@@ -163,3 +181,5 @@ Safari_Japanese: Mozilla/5.0 (Windows; U; Windows NT 6.0; ja-JP) AppleWebKit/533
 Opera_Mini: Opera/9.80 (Series 60; Opera Mini/6.0.24095/24.760; U; en) Presto/2.5.25 Version/10.54
 AOL_XP: Mozilla/4.0 (compatible; MSIE 8.0; AOL 9.6; AOLBuild 4340.5001; Windows NT 5.1; Trident/4.0)
 Iron_Win7: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.1 (KHTML, like Gecko)  Iron/13.0.800.1 Chrome/13.0.800.1 Safari/535.1
+IE11_Win8: Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko
+Opera15_Win7: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.52 Safari/537.36 OPR/15.0.1147.100
