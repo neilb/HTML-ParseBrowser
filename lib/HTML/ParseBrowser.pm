@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw($AUTOLOAD);
-our $VERSION = '1.07';
+our $VERSION = '1.08';
 
 my %lang =
 (
@@ -70,6 +70,16 @@ sub Parse {
             $browser->{version}->{v}     = $1;
             $browser->{version}->{major} = $2;
             $browser->{version}->{minor} = $4 if defined($4) && $4 ne '';
+        }
+    }
+    elsif ($ua_string =~ m!\((BlackBerry|BB10).*Version/([0-9\.]+)!) {
+        my $version_string = $2;
+        $browser->{name} = $browser->{ostype} = 'BlackBerry';
+        $browser->{version}->{v} = $version_string;
+        if ($version_string =~ m!^([0-9]+)(\.([0-9]+).*)?!) {
+            $browser->{version}->{major} = $browser->{osvers} = $1;
+            $browser->{os}               = "BlackBerry $1";
+            $browser->{version}->{minor} = $3 if defined($3) && $3 ne '';
         }
     }
     elsif ($ua_string =~ m!Mozilla/5.0 \(.*?Windows.*?; rv:((\d+)\.(\d+))\) like Gecko!) {

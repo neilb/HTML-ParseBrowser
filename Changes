@@ -1,5 +1,10 @@
 Revision history for Perl module HTML::ParseBrowser
 
+1.08 2014-06-01
+
+    - Recognise BlackBerry 10 and earlier versions. Seems like browser version
+      and OS version are the same thing. Requested by Rob Mueller.
+
 1.07 2014-02-04
 
     - Recognise Internet Explorer 11

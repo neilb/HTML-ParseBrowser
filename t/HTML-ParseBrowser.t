@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 46;
+use Test::More tests => 48;
 BEGIN { use_ok('HTML::ParseBrowser') };
 
 #########################
@@ -151,6 +151,27 @@ ok($ua->Parse($browser->{Opera15_Win7})
   && $ua->osvers eq '7',
   'Opera 15 on Windows 7');
 
+ok($ua->Parse($browser->{BlackBerry10})
+  && $ua->name eq 'BlackBerry'
+  && $ua->major == 10
+  && $ua->minor == 2
+  && $ua->v eq '10.2.1.2141'
+  && $ua->ostype eq 'BlackBerry'
+  && $ua->os eq 'BlackBerry 10'
+  && $ua->osvers eq '10'
+  ,'BlackBerry 10');
+
+ok($ua->Parse($browser->{BlackBerry7})
+  && $ua->name eq 'BlackBerry'
+  && $ua->major == 7
+  && $ua->minor == 0
+  && $ua->v eq '7.0.0.254'
+  && $ua->os eq 'BlackBerry 7'
+  && $ua->ostype eq 'BlackBerry'
+  && $ua->osvers eq '7'
+  ,'BlackBerry 7');
+
+
 __DATA__
 Safari3_mac: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; en-us) AppleWebKit/525.18 (KHTML, like Gecko) Version/3.1.1 Safari/525.18
 FF2_mac: Mozilla/5.0 (Macintosh; U; Intel Mac OS X; en-US; rv:1.8.1.14) Gecko/20080404 Firefox/2.0.0.14
@@ -183,3 +204,5 @@ AOL_XP: Mozilla/4.0 (compatible; MSIE 8.0; AOL 9.6; AOLBuild 4340.5001; Windows 
 Iron_Win7: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.1 (KHTML, like Gecko)  Iron/13.0.800.1 Chrome/13.0.800.1 Safari/535.1
 IE11_Win8: Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko
 Opera15_Win7: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.52 Safari/537.36 OPR/15.0.1147.100
+BlackBerry10: Mozilla/5.0 (BB10; Touch) AppleWebKit/537.35+ (KHTML, like Gecko) Version/10.2.1.2141 Mobile Safari/537.35+
+BlackBerry7: Mozilla/5.0 (BlackBerry; U; BlackBerry 9860; en-US) AppleWebKit/534.11+ (KHTML, like Gecko) Version/7.0.0.254 Mobile Safari/534.11+
