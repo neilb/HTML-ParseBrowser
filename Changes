@@ -4,6 +4,7 @@ Revision history for Perl module HTML::ParseBrowser
 
     - Recognise BlackBerry 10 and earlier versions. Seems like browser version
       and OS version are the same thing. Requested by Rob Mueller.
+    - Added HTTP::UserAgentString::Parser and Woothee to SEE ALSO
 
 1.07 2014-02-04
 

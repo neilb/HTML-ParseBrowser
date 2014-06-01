@@ -434,27 +434,28 @@ the best match:
 
 http://blogs.perl.org/users/neilb/2011/10/cpan-modules-for-parsing-user-agent-strings.html
 
-In brief, the following modules are worth considering:
+In brief, the following modules are worth considering.
 
-=over
+L<Parse::HTTP::UserAgent> has best overall coverage of different browsers
+and other user agents.
 
-=item Parse::HTTP::UserAgent
-
-Has best overall coverage of different browsers and other user agents.
-
-=item HTTP::DetectUserAgent
-
-Not as good coverage, but handles modern browsers well, and is the
+L<HTTP::DetectUserAgent> doesn't have as good coverage,
+but handles modern browsers well, and is the
 fastest module, so if you're processing large logfiles, this might
 be the best choice.
 
-=item HTTP::BrowserDetect
+L<HTTP::UserAgentString::Parser> is by far the fastest, and has good
+coverage of modern browsers.
 
-Poorest coverage of the three modules listed here, and doesn't do well at
+L<Woothee> is available for a number of programming languages, not just Perl.
+It is faster than most of the modules, and has good coverage of the most
+popular browsers, but not as good overall coverage.
+
+L<HTTP::BrowserDetect> has poorest coverage of the modules listed here,
+and doesn't do well at
 recognising version numbers. It's the best module for detecting whether
 a given agent is a robot/crawler though.
 
-=back
 
 =head1 REPOSITORY
 
