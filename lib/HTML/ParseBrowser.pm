@@ -1,10 +1,10 @@
 package HTML::ParseBrowser;
 
+use 5.006;
 use strict;
 use warnings;
 
 use vars qw($AUTOLOAD);
-our $VERSION = '1.08';
 
 my %lang =
 (
@@ -66,10 +66,13 @@ sub Parse {
         $browser->{name} = 'Safari';
         $browser->{os} = $browser->{ostype} = 'iOS';
         ($browser->{osvers} = $2) =~ s/_/./g;
-        if ($useragent =~ m!Version/((\d+)(\.(\d+)[\.0-9]*)?)!) {
-            $browser->{version}->{v}     = $1;
-            $browser->{version}->{major} = $2;
-            $browser->{version}->{minor} = $4 if defined($4) && $4 ne '';
+        if ($useragent =~ m!(Version|CriOS)/((\d+)(\.(\d+)[\.0-9]*)?)!) {
+            if ($1 eq 'CriOS') {
+                $browser->{name} = 'Chrome';
+            }
+            $browser->{version}->{v}     = $2;
+            $browser->{version}->{major} = $3;
+            $browser->{version}->{minor} = $5 if defined($5) && $5 ne '';
         }
     }
     elsif ($ua_string =~ m!\((BlackBerry|BB10).*Version/([0-9\.]+)!) {
@@ -105,6 +108,7 @@ sub Parse {
     } else {
         for (@{$browser->{useragents}}) {
             my ($br, $ver) = split /\//;
+            $br = 'Chrome' if $br eq 'CriOS';
             $browser->{name} = $br;
             $browser->{version}->{v} = $ver;
             if ($ver =~ m!^v?(\d+)\.(\d+)!) {

@@ -5,7 +5,7 @@
 
 # change 'tests => 1' to 'tests => last_test_to_print';
 
-use Test::More tests => 48;
+use Test::More tests => 49;
 BEGIN { use_ok('HTML::ParseBrowser') };
 
 #########################
@@ -171,6 +171,15 @@ ok($ua->Parse($browser->{BlackBerry7})
   && $ua->osvers eq '7'
   ,'BlackBerry 7');
 
+ok($ua->Parse($browser->{Chrome_criOS})
+  && $ua->name eq 'Chrome'
+  && $ua->major == 19
+  && $ua->minor == 0
+  && $ua->v eq '19.0.1084.60'
+  && $ua->os eq 'iOS'
+  && $ua->ostype eq 'iOS'
+  && $ua->osvers eq '5.1.1'
+  ,'Chrome on iOS 5.1.1');
 
 __DATA__
 Safari3_mac: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_2; en-us) AppleWebKit/525.18 (KHTML, like Gecko) Version/3.1.1 Safari/525.18
@@ -206,3 +215,4 @@ IE11_Win8: Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko
 Opera15_Win7: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/28.0.1500.52 Safari/537.36 OPR/15.0.1147.100
 BlackBerry10: Mozilla/5.0 (BB10; Touch) AppleWebKit/537.35+ (KHTML, like Gecko) Version/10.2.1.2141 Mobile Safari/537.35+
 BlackBerry7: Mozilla/5.0 (BlackBerry; U; BlackBerry 9860; en-US) AppleWebKit/534.11+ (KHTML, like Gecko) Version/7.0.0.254 Mobile Safari/534.11+
+Chrome_criOS: Mozilla/5.0 (iPhone; U; CPU iPhone OS 5_1_1 like Mac OS X; en) AppleWebKit/534.46.0 (KHTML, like Gecko) CriOS/19.0.1084.60 Mobile/9B206 Safari/7534.48.3
