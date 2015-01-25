@@ -1,5 +1,5 @@
 Revision history for Perl module HTML::ParseBrowser
-
+    - Refactor tests to be data-driven
 1.09 2014-06-03
     - Recognise Chrome on iOS (the "CriOS/N.N.N.N" string)
     - Switched to Dist::Zilla
