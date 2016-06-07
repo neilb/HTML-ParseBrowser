@@ -12,7 +12,7 @@ use File::Spec;
 use JSON::Tiny qw(decode_json);
 # 0.94 necessary for subtests and note()
 use Test::More 0.94;
-plan tests => 46;
+# plan tests => 46;
 require_ok('HTML::ParseBrowser');
 
 my $ua;
@@ -50,3 +50,5 @@ for my $data (@$tests){
 $ua->Parse('Mozilla/5.0 (Macintosh; U; PPC Mac OS X; it-IT) AppleWebKit/125.4 (KHTML, like Gecko, Safari) OmniWeb/v563.15');
 ok(!defined($ua->osvers), 'no OS version for this UA string')
   or note $ua->osvers;
+
+done_testing();

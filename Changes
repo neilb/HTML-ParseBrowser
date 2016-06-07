@@ -1,5 +1,9 @@
 Revision history for Perl module HTML::ParseBrowser
 
+1.11 2016-06-07 NEILB
+    - Changed test suite to use done_testing(), so you can just
+      add new test cases to the corpus without having to change the driver.
+
 1.10 2015-01-25 NEILB
     - Refactor tests to be data-driven (NGLENN++)
 
