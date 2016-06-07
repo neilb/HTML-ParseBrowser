@@ -1,6 +1,7 @@
 Revision history for Perl module HTML::ParseBrowser
 
 1.11 2016-06-07 NEILB
+    - Now recognises Microsoft Edge
     - Changed test suite to use done_testing(), so you can just
       add new test cases to the corpus without having to change the driver.
 

@@ -295,6 +295,16 @@
       "osvers":"4.2.1",
       "ostype":"Linux"
    },
+   {
+      "user_agent":"Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.10136",
+      "name":"Edge",
+      "major":"12",
+      "minor":"10136",
+      "v":"12.10136",
+      "os":"Windows NT 10.0",
+      "osvers":"10",
+      "ostype":"Windows NT"
+   },
    "# Is this really Safari on Android?",
    {
       "user_agent":"Mozilla/5.0 (Linux; U; Android 3.2; en-us; GT-P7300 Build/HTJ85B) AppleWebKit/534.13 (KHTML, like Gecko) Version/4.0 Safari/534.13",

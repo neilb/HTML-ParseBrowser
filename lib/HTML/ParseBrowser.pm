@@ -106,17 +106,21 @@ sub Parse {
         $browser->{version}->{major} = $2;
         $browser->{version}->{minor} = $3;
     } else {
+        my $seenchrome = 0;
         for (@{$browser->{useragents}}) {
             my ($br, $ver) = split /\//;
             $br = 'Chrome' if $br eq 'CriOS';
-            $browser->{name} = $br;
-            $browser->{version}->{v} = $ver;
-            if ($ver =~ m!^v?(\d+)\.(\d+)!) {
-                ($browser->{version}->{major}, $browser->{version}->{minor}) = ($1, $2);
+            if ($br ne 'Safari' || not $seenchrome) {
+                $browser->{name} = $br;
+                $browser->{version}->{v} = $ver;
+                if ($ver =~ m!^v?(\d+)\.(\d+)!) {
+                    ($browser->{version}->{major}, $browser->{version}->{minor}) = ($1, $2);
+                }
             }
+            $seenchrome = 1 if lc($br) eq 'chrome';
             last if lc($br) eq 'iron';
             last if lc($br) eq 'lynx';
-            last if lc($br) eq 'chrome';
+            # last if lc($br) eq 'chrome';
             last if lc($br) eq 'opera';
         }
     }
@@ -132,6 +136,14 @@ sub Parse {
                 $browser->{version}->{minor}) = split /\./, $1, 2;
             };
         }
+
+        m!^Edge/(([0-9]+)\.([0-9]+))! and do {
+print STDERR "** EDGE **\n";
+            $browser->{name} = 'Edge';
+            $browser->{version}->{v} = $1;
+            $browser->{version}->{major} = $2;
+            $browser->{version}->{minor} = $3;
+        };
 
         if (m!^AOL ([0-9].*)!) {
             $browser->{name} = 'AOL';
@@ -163,7 +175,10 @@ sub Parse {
             if (/Windows NT\s*((\d+)(\.\d+)?)/ || /^WinNT((\d+)(\.\d+)?)/) {
                 $browser->{ostype} = 'Windows NT';
                 $version = $1;
-                if ($version >= 6.3) {
+                if ($version >= 10) {
+                    $browser->{osvers} = '10';
+                }
+                elsif ($version >= 6.3 && $version < 7) {
                     $browser->{osvers} = '8.1';
                 } elsif ($version >= 6.2) {
                     $browser->{osvers} = '8';
