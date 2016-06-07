@@ -4,6 +4,7 @@ Revision history for Perl module HTML::ParseBrowser
     - Now recognises Microsoft Edge
     - Changed test suite to use done_testing(), so you can just
       add new test cases to the corpus without having to change the driver.
+    - Updated dist.ini to include META.json in releases
 
 1.10 2015-01-25 NEILB
     - Refactor tests to be data-driven (NGLENN++)
