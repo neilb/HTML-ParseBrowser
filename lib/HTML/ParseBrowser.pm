@@ -138,7 +138,6 @@ sub Parse {
         }
 
         m!^Edge/(([0-9]+)\.([0-9]+))! and do {
-print STDERR "** EDGE **\n";
             $browser->{name} = 'Edge';
             $browser->{version}->{v} = $1;
             $browser->{version}->{major} = $2;
