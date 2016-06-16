@@ -9,7 +9,10 @@ use strict;
 use warnings;
 use FindBin qw($Bin);
 use File::Spec;
-use JSON::Tiny qw(decode_json);
+BEGIN {
+  eval { require JSON::Tiny; JSON::Tiny->import("decode_json"); 1; } ||
+  eval { require JSON; JSON->import("decode_json"); 1; };
+}
 # 0.94 necessary for subtests and note()
 use Test::More 0.94;
 # plan tests => 46;
