@@ -138,7 +138,6 @@ sub Parse {
         }
 
         m!^Edge/(([0-9]+)\.([0-9]+))! and do {
-print STDERR "** EDGE **\n";
             $browser->{name} = 'Edge';
             $browser->{version}->{v} = $1;
             $browser->{version}->{major} = $2;
@@ -171,7 +170,7 @@ print STDERR "** EDGE **\n";
 
         if (/^Win/) {
             $browser->{os} = $_;
-            $browser->{ostype} = 'Windows';
+            $browser->{ostype} = 'Windows' . (/phone/i ? ' Phone' : '');
             if (/Windows NT\s*((\d+)(\.\d+)?)/ || /^WinNT((\d+)(\.\d+)?)/) {
                 $browser->{ostype} = 'Windows NT';
                 $version = $1;
@@ -196,7 +195,7 @@ print STDERR "** EDGE **\n";
                     $browser->{osvers} = $version;
                 }
             }
-            elsif (/Windows (\d+(\.\d+)?)/) {
+            elsif (/Windows (?:Phone )?(\d+(\.\d+)?)/) {
                 $browser->{osvers} = $1;
             } elsif (/Win(\w\w)/i) {
                 $browser->{osvers} = $1;
@@ -214,7 +213,7 @@ print STDERR "** EDGE **\n";
         }
 
         # TODO: parsing of version and osarc doesn't always get it right. See Danish Opera test
-        if (/Android\s([\.0-9]+)/) {
+        if (/Android\s([\.0-9]+)/ && lc($browser->{name}) ne 'edge') {
             $browser->{os}     = 'Android';
             $browser->{ostype} = 'Linux';
             $browser->{osvers} = $1;
