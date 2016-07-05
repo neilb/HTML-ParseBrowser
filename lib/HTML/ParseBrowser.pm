@@ -297,10 +297,10 @@ HTML::ParseBrowser - Simple interface for User-Agent string parsing
 =head1 SYNOPSIS
 
   use HTML::ParseBrowser;
-  
+
   # Opera 6 on Windows 98, French
   my $uastring = 'Mozilla/4.0 (compatible; MSIE 5.0; Windows 98) Opera 6.0  [fr]';
-  
+
   my $ua = HTML::ParseBrowser->new($uastring);
   print "Browser  : ", $ua->name, "\n";
   print "Version  : ", $ua->v, "\n";
@@ -478,7 +478,7 @@ a given agent is a robot/crawler though.
 =head1 REPOSITORY
 
 L<https://github.com/neilbowers/HTML-ParseBrowser>
- 
+
 =head1 AUTHOR
 
 Dodger (aka Sean Cannon)
