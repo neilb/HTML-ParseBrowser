@@ -1,5 +1,11 @@
 Revision history for Perl module HTML::ParseBrowser
 
+1.12 2016-07-05 NEILB
+    - Removed a debugging print statement left in the last release
+    - Added Windows phone support
+    - Allow JSON or JSON::Tiny in test suite
+    - All changes from Rob Mueller++
+
 1.11 2016-06-07 NEILB
     - Now recognises Microsoft Edge
     - Changed test suite to use done_testing(), so you can just
