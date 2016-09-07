@@ -62,7 +62,7 @@ sub Parse {
 
     $browser->{useragents} = [grep /\//, split /\s+/, $useragent];
 
-    if ($ua_string =~ /(iPhone|iPad|iPod).*?OS\s+(\d_\d(_\d)?)/) {
+    if ($ua_string =~ /(iPhone|iPad|iPod).*?OS\s+(\d+_\d(_\d)?)/) {
         $browser->{name} = 'Safari';
         $browser->{os} = $browser->{ostype} = 'iOS';
         ($browser->{osvers} = $2) =~ s/_/./g;
