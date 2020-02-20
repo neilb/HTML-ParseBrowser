@@ -25,6 +25,7 @@ my %name_map =
     'Gecko'     => 'Mozilla',
     'Netscape6' => 'Netscape',
     'MSIE'      => 'Internet Explorer',
+    'Edg'       => 'Edge',
 );
 
 sub new {
