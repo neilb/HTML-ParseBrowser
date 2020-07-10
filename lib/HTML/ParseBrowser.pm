@@ -67,9 +67,12 @@ sub Parse {
         $browser->{name} = 'Safari';
         $browser->{os} = $browser->{ostype} = 'iOS';
         ($browser->{osvers} = $2) =~ s/_/./g;
-        if ($useragent =~ m!(Version|CriOS)/((\d+)(\.(\d+)[\.0-9]*)?)!) {
+        if ($useragent =~ m!(Version|CriOS|FxiOS)/((\d+)(\.(\d+)[\.0-9]*)?)!) {
             if ($1 eq 'CriOS') {
                 $browser->{name} = 'Chrome';
+            }
+            if ($1 eq 'FxiOS') {
+                $browser->{name} = 'Firefox';
             }
             $browser->{version}->{v}     = $2;
             $browser->{version}->{major} = $3;

@@ -342,5 +342,15 @@
       "os":"iOS",
       "ostype":"iOS",
       "osvers":"10.0"
+    },
+    {
+      "user_agent":"Mozilla/5.0 (iPhone; CPU OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/26.0  Mobile/15E148 Safari/605.1.15",
+      "name":"Firefox",
+      "major":"26",
+      "minor":"0",
+      "v":"26.0",
+      "os":"iOS",
+      "ostype":"iOS",
+      "osvers":"13.5.1"
     }
 ]
