@@ -197,9 +197,9 @@ sub Parse {
                 }
             }
             elsif (/Windows (?:Phone )?(\d+(\.\d+)?)/) {
-                $browser->{osvers} = $1;
+                $browser->{osvers} = $1 if !$browser->{osvers};
             } elsif (/Win(\w\w)/i) {
-                $browser->{osvers} = $1;
+                $browser->{osvers} = $1 if !$browser->{osvers};
             }
         }
 
